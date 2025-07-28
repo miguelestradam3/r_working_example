@@ -1,0 +1,222 @@
+---
+title: "Data Analysis in R: Predictive Analysis with Regression"
+author: "Olayinka Arimoro"
+date: "`r Sys.Date()`"
+output: html_document
+---
+## About Report
+This RMarkdown file contains the final report of the data analysis done for this project on building a linear regression model for the txhousing data set. It contains analysis such as data exploration, computing summary statistics, creating plots, and building the predictive model. The final report was completed on `r date()`. 
+
+The data analysis seeks to find answer to these questions are:
+1. Is there a relationship between number of sales and total value of sales?
+2. How much of the variations in total value of sales can be explained by number of sales?
+
+The interest of the analysis is to get a sense of the house sale prices, including **total sales value and the number of sales**, across different cities.
+
+To achieve the aim of this project, we will use the txhousing data set:
+* Contains information about the housing market in Texas provided by the TAMU real estate center (https://www.recenter.tamu.edu/).
+* This data set contains 8,602 rows and 9 variables.
+* We will work majorly with two variable "sales" which is number of sales as the x-variable and "volume" which is the total value of sales as the y-variable.
+
+## Task One: Import packages and dataset
+In this task, you will import the required packages and data for this project
+```{r}
+## Importing required packages
+library(ggplot2)
+library(tidyverse)
+library(lmtest)
+library(ggpubr)
+library(broom)
+library(ggfortify)
+library(skimr)
+
+## Import the built-in R data set
+data("txhousing")
+
+## View and check the dimension of the data set
+View(txhousing)
+dim(txhousing)
+
+txhousing %>% drop_na()
+
+## Check the column names for the data set
+names(txhousing)
+```
+
+## Task Two: Use R functions to describe the data
+In this task, you will learn how to explore and clean the data using R functions
+```{r}
+## Take a peek using the head and tail functions
+head(txhousing)
+tail(txhousing)
+
+## Check the internal structure of the data frame
+glimpse(txhousing)
+
+## Create a broad overview of a data set
+skim(txhousing)
+
+```
+
+## Task Three: Create data visualization using ggplot
+In this task, you will learn how to create a scatter plot to visualize the variables for model building
+```{r}
+## Find the correlation between the variables
+cor(txhousing["sales"], txhousing["volume"])
+
+## Plot a scatter plot for the variables with sales on the x-axis
+## volume on the y-axis
+
+ggplot(data=txhousing, aes(x=sales, y=volume)) + geom_point() + stat_smooth(se=FALSE)
+```
+
+## Task Four: Load and describe a dataset
+Data Source: https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques/overview
+```{r}
+## Import the house sales data
+house_sales <- read_csv("house_sales_prices.csv")
+
+## Get a glimpse of the data set
+glimpse(house_sales)
+
+## Create a broad overview of a data set
+skim(house_sales)
+```
+
+## Task Five: Build a simple regression model
+In this task, you will build a simple linear regression with one dependent and one independent variable and interpret the results
+
+The linear model equation can be written as follow: volume = b0 + b1 * sales
+
+* b0 and b1 are known as the regression beta coefficients or parameters:
+* b0 is the intercept of the regression line; that is the predicted value when x = 0.
+* b1 is the slope of the regression line.
+
+```{r}
+## Create a simple linear regression model using the variables
+
+
+## Plot the regression line for the model
+ggplot(txhousing, aes(x = sales, y = volume)) +
+  geom_point() +
+  stat_smooth(method = lm) +
+  labs(title = "Regression of Sales on Volume of Housing sales in TX",
+       x = "Sales", y = "Volume")
+```
+From the output above:
+
+The estimated regression line equation can be written as follow: volume = -12060071  + 216346*sales
+
+* The estimated regression line equation can be written as follow: volume = -12060071  + 216346*sales
+
+* The intercept (b0) is -12060071. It can be interpreted as the predicted total value of sales for a zero number of sales. Looks like with zero sales, there we will run into loss
+
+* The regression beta coefficient for the variable sales (b1), for every 1 unit increase in the number of sales, the required volume increases by 216346.
+
+
+## Task Six: Perform diagnostic checks on fitted model
+In this task, you will use diagnostic plots to check whether the assumptions of linear regression model are satisfied
+
+**Assumptions:**
+
+Linear regression makes several assumptions about the data, such as:
+* Linearity of the data: The relationship between the predictor (x) and the outcome (y) is assumed to be linear.
+
+* Normality of residuals: The residual errors are assumed to be normally distributed.
+
+* Homogeneity of residuals variance: The residuals are assumed to have a constant variance (homoscedasticity)
+
+*Independence of residuals error terms.
+
+```{r}
+## Plotting the fitted model
+
+
+## Return the first diagnostic plot for the model
+
+
+## Create all four plots at once
+
+
+```
+
+## Task Seven: Perform model fit assessment
+In this task, you will learn how to assess how well the model fit and significance of the predictor variable
+```{r}
+## Assess the summary of the fitted model
+
+
+## Calculate the confidence interval for the coefficients
+
+```
+
+## Task Nine: Build a simple regression model with transformation
+In this task, you will build a simple linear regression model using a square root or log transformation on the independent variable 
+```{r}
+## Build a log transformed regression model
+
+
+## Return the summary of the model
+
+
+## Return the first diagnostic plot for the model
+
+
+## Return the second diagnostic plot for the model
+
+
+## Return the third diagnostic plot for the model
+
+
+```
+
+## Task Ten: Make predictions using the fitted model
+In this task, you will learn how to check for metrics from the fitted model and make predictions given new values of the independent variable
+```{r}
+## Find the fitted values of the simple regression model
+
+
+## Return the model metrics
+
+
+## Predict new values using the model
+
+
+```
+
+## Task Eleven: Multiple Regression
+In this task, you will build a multiple regression model with one dependent variable and three independent variables and interpret the results
+```{r}
+## Build the multiple regression model with volume as the y variable and sales, median and age on the x variables
+
+
+## This prints the result of the model
+multiple_reg
+
+## Check the summary of the multiple regression model
+summary(multiple_reg)
+
+## Plot the fitted multiple regression model
+autoplot(multiple_reg)
+
+```
+
+## Task Twelve: Create a model to predict house prices in Iowa
+In this task, you will build a model from scratch to predict house prices using variables in a data set
+```{r}
+## Create a broad overview of the data set
+
+
+## Drop the missing values in the LotFrontage variable
+
+
+## Build the multiple regression model 
+
+
+## Check the summary of the multiple regression model
+
+
+## Perform diagnostic plots of the fitted multiple regression model
+
+
+```
