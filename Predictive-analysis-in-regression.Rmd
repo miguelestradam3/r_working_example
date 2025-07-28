@@ -94,7 +94,8 @@ The linear model equation can be written as follow: volume = b0 + b1 * sales
 
 ```{r}
 ## Create a simple linear regression model using the variables
-
+simple_model <- lm(volume ~ sales, data=txhousing)
+simple_model
 
 ## Plot the regression line for the model
 ggplot(txhousing, aes(x = sales, y = volume)) +
@@ -130,10 +131,7 @@ Linear regression makes several assumptions about the data, such as:
 
 ```{r}
 ## Plotting the fitted model
-
-
-## Return the first diagnostic plot for the model
-
+plot(simple_model)
 
 ## Create all four plots at once
 
